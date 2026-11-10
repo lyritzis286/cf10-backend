@@ -8,3 +8,11 @@ export const findAll = async (): Promise<IUser[]> => {
     .lean()
     .exec();
 };
+
+export const findByEmail = async (email: string): Promise<IUser | null> => {
+  const user = await User.findOne({ email: email })
+    .populate({ path: "roles", model: Role })
+    .lean()
+    .exec();
+  return user;
+};
