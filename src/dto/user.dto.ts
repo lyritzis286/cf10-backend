@@ -1,0 +1,27 @@
+import { StringExpressionOperatorReturningBoolean } from "mongoose";
+import { IRole } from "../models/role.model";
+import { IPhone } from "../models/user.model";
+
+export interface IPhoneDTO {
+  type: string;
+  number: string;
+}
+
+export interface UserResponseDTO {
+  id: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  address: {
+    area: string;
+    street: string;
+    number: string;
+    po: string;
+    municipality: string;
+  };
+  phone: IPhoneDTO[];
+  // phone: IPhone[]
+  roles: string[];
+  // roles: IRole;
+}
