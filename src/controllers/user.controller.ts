@@ -40,4 +40,15 @@ export const create = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {};
+) => {
+  try {
+    const data = req.body;
+    const result = await userService.createUser(data);
+    if (!result) {
+      return res.status(404).json({ message: "user not created" });
+    }
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};

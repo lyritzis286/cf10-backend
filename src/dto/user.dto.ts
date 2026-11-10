@@ -25,3 +25,20 @@ export interface UserResponseDTO {
   roles: string[];
   // roles: IRole;
 }
+
+export interface CreateUserDTO {
+  username: string;
+  password: string;
+  firstname?: string;
+  lastname?: string;
+  email: string;
+  address?: {
+    area?: string;
+    street?: string;
+    number?: string;
+    po?: string;
+    municipality?: string;
+  };
+  phone?: IPhoneDTO[];
+  roles?: string[];
+}

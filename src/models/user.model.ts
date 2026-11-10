@@ -1,23 +1,23 @@
 import { Schema, model, Document, Types } from "mongoose";
 
-export interface IPhone extends Document {
+export interface IPhone {
   type: string;
   number: string;
 }
 export interface IUser extends Document {
   username: string;
   password: string;
-  firstname: string;
-  lastname: string;
+  firstname?: string;
+  lastname?: string;
   email: string;
-  address: {
-    area: string;
-    street: string;
-    number: string;
-    po: string;
-    municipality: string;
+  address?: {
+    area?: string;
+    street?: string;
+    number?: string;
+    po?: string;
+    municipality?: string;
   };
-  phone: IPhone[];
+  phone?: IPhone[];
   roles: Types.ObjectId[];
 }
 const PhoneSchema = new Schema<IPhone>({
