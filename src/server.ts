@@ -1,6 +1,7 @@
 import express from "express";
 import { connectDB } from "./utils/db";
-const app = express();
+import app from "./app";
+// const app = express();
 
 const start = async () => {
   await connectDB();
