@@ -6,3 +6,14 @@ export interface IRoleDTO {
   description: string;
   active: boolean;
 }
+
+export interface CreateRoleDTO {
+  role: string;
+  description?: string;
+  active?: boolean;
+}
+
+export interface UpdateRoleDTO {
+  description?: string;
+  active?: boolean;
+}
