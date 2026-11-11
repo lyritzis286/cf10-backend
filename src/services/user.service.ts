@@ -6,6 +6,7 @@ import { IUser } from "../models/user.model";
 import { CreateUserDTO } from "../dto/user.dto";
 import { Types } from "mongoose";
 import bcrypt from "bcrypt";
+import { UpdateUserDTO } from "../dto/user.dto";
 
 export const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "5");
 
@@ -53,4 +54,30 @@ export const createUser = async (payload: Partial<CreateUserDTO>) => {
   if (user) {
     return user;
   }
+};
+
+export const updateUser = async (username: string, payload: UpdateUserDTO) => {
+  const updateData: Partial<IUser> = {};
+
+  if (payload.firstname !== undefined) updateData.firstname = payload.firstname;
+  if (payload.lastname !== undefined) updateData.lastname = payload.lastname;
+  if (payload.email !== undefined) updateData.email = payload.email;
+  if (payload.address !== undefined) updateData.address = payload.address;
+  if (payload.phone !== undefined) updateData.phone = payload.phone;
+
+  if (payload.password) {
+    updateData.password = await bcrypt.hash(payload.password, SALT_ROUNDS);
+  }
+
+  if (payload.roles) {
+    updateData.roles = payload.roles.map((id) => new Types.ObjectId(id));
+  }
+
+  const user = await userDao.updateUser(username, updateData);
+  return user;
+};
+
+export const deleteUser = async (username: string) => {
+  const user = await userDao.deleteUser(username);
+  return user;
 };
