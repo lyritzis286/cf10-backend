@@ -5,7 +5,10 @@ import * as userDao from "../dao/user.dao";
 import { IUser } from "../models/user.model";
 import { CreateUserDTO } from "../dto/user.dto";
 import { Types } from "mongoose";
-// export const findUsers = async (): Promise<IUser[]> => {
+import bcrypt from "bcrypt";
+
+export const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "5");
+
 export const findUsers = async () => {
   // const users = await User.find()
   //   .populate({ path: "roles", model: Role })
@@ -24,19 +27,23 @@ export const findUserByEmail = async (email: string) => {
 };
 
 export const createUser = async (payload: Partial<CreateUserDTO>) => {
+  if (payload.password) {
+    const hash = await bcrypt.hash(payload.password, SALT_ROUNDS);
+    payload.password = hash;
+  }
   let roleIds: Types.ObjectId[] = [];
   if (payload.roles && payload.roles.length > 0) {
-    let rolesIds = payload.roles.map((id) => new Types.ObjectId(id));
+    roleIds = payload.roles.map((id) => new Types.ObjectId(id));
   } else {
-    let reader: IRole | null = await Role.findOne({ role: "Reader" });
+    let reader: IRole | null = await Role.findOne({ role: "READER" });
     if (!reader) {
       reader = await Role.create({
         role: "READER",
         description: "Deafault role",
         active: true,
       });
-      roleIds = [reader._id];
     }
+    roleIds = [reader._id];
   }
 
   const user = await userDao.createUser({
