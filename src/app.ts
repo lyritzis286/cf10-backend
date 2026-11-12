@@ -4,7 +4,7 @@ import roleRoutes from "./routes/role.routes";
 
 const app = express();
 app.use(express.json());
-app.use("/api/user", userRoutes);
-app.use("/api/role", roleRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/roles", roleRoutes);
 
 export default app;
