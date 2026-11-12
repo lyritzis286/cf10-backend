@@ -7,7 +7,11 @@ import { userInfo } from "node:os";
 
 dotenv.config();
 
-interface AuthPayload extends JwtPayload {}
+interface AuthPayload extends JwtPayload {
+  username: string;
+  email: string;
+  roles: IRole[];
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
