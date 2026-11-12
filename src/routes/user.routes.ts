@@ -7,12 +7,19 @@ import {
 } from "../validators/user.validator";
 import { validateEmail } from "../middlewares/validateEmail.middleware";
 import { authenticate } from "../middlewares/auth.middleware";
+import { hasAdminRole } from "../middlewares/user.middleware";
 
 const router = Router();
 
 router.get("/", userCtrl.getAll);
 router.get("/email/:email", validateEmail(), userCtrl.getOneByEmail);
-router.post("/", authenticate, validate(createUserSchema), userCtrl.create);
+router.post(
+  "/",
+  authenticate,
+  hasAdminRole,
+  validate(createUserSchema),
+  userCtrl.create,
+);
 router.put(
   "/:username",
   authenticate,
