@@ -6,11 +6,18 @@ import {
   updateUserSchema,
 } from "../validators/user.validator";
 import { validateEmail } from "../middlewares/validateEmail.middleware";
+import { authenticate } from "../middlewares/auth.middleware";
+
 const router = Router();
 
 router.get("/", userCtrl.getAll);
 router.get("/email/:email", validateEmail(), userCtrl.getOneByEmail);
-router.post("/", validate(createUserSchema), userCtrl.create);
-router.put("/:username", validate(updateUserSchema), userCtrl.update);
-router.delete("/:username", userCtrl.remove);
+router.post("/", authenticate, validate(createUserSchema), userCtrl.create);
+router.put(
+  "/:username",
+  authenticate,
+  validate(updateUserSchema),
+  userCtrl.update,
+);
+router.delete("/:username", authenticate, userCtrl.remove);
 export default router;
