@@ -6,4 +6,5 @@ const router = Router();
 
 router.post("/login", validate(loginSchema), authCtrl.login);
 
+router.post("/google-auth", authCtrl.googleLogin);
 export default router;
