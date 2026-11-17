@@ -8,7 +8,7 @@ import swaggerJSDoc from "swagger-jsdoc";
 
 const options: swaggerJSDOC.Options = {
   definition: {
-    openapi: "3.0",
+    openapi: "3.0.0",
     info: {
       title: "Users Backend API",
       version: "1.0.0",
@@ -37,5 +37,5 @@ const options: swaggerJSDOC.Options = {
 export const swaggerSpec = swaggerJSDoc(options);
 
 export const setupSwagger = (app: Express) => {
-  app.use("api/docs", SwaggerUi.serve, SwaggerUi.setup(swaggerSpec));
+  app.use("/api/docs", SwaggerUi.serve, SwaggerUi.setup(swaggerSpec));
 };

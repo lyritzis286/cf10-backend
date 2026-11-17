@@ -11,8 +11,20 @@ import { hasAdminRole } from "../middlewares/user.middleware";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /users:
+ *  get:
+ *    summary: Return all users from my mongo db
+ *    tags: [Users]
+ *    responses:
+ *      200:
+ *        description: Returns array of users
+ */
 router.get("/", userCtrl.getAll);
+
 router.get("/email/:email", validateEmail(), userCtrl.getOneByEmail);
+
 router.post(
   "/",
   authenticate,
