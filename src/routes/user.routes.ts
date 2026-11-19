@@ -123,5 +123,26 @@ router.put(
   validate(updateUserSchema),
   userCtrl.update,
 );
+
+/**
+ * @openapi
+ * /users/{username}:
+ *  delete:
+ *    summary: Delete user
+ *    tags: [Users]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: username
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: User deleted
+ *      404:
+ *         description: User not found
+ */
 router.delete("/:username", authenticate, hasAdminRole, userCtrl.remove);
 export default router;
