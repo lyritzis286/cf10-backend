@@ -49,6 +49,8 @@ router.get("/email/:email", validateEmail(), userCtrl.getOneByEmail);
  *  post:
  *    summary: Creates a new user
  *    tags: [Users]
+ *    security:
+ *      - bearerAuth: []
  *    requestBody:
  *      required: true
  *      content:
@@ -77,11 +79,49 @@ router.post(
   validate(createUserSchema),
   userCtrl.create,
 );
+
+/**
+ * @openapi
+ * /users/{username}:
+ *  put:
+ *    summary: Update User
+ *    tags: [Users]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: username
+ *        required: true
+ *        schema:
+ *          type: string
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              username:
+ *                type: string
+ *              password:
+ *                type: string
+ *              firstname:
+ *                type: string
+ *              lastname:
+ *                type: string
+ *              email:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: user updated
+ *
+ */
 router.put(
   "/:username",
   authenticate,
+  hasAdminRole,
   validate(updateUserSchema),
   userCtrl.update,
 );
-router.delete("/:username", authenticate, userCtrl.remove);
+router.delete("/:username", authenticate, hasAdminRole, userCtrl.remove);
 export default router;
