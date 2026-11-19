@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import { email } from "zod";
-import { AuthPayload } from "../models/auth.model";
+import { AuthPayloadDTO } from "../dto/auth.dto";
 import { IRoleDTO } from "../dto/role.dto";
 import Role from "../models/role.model";
 import fa from "zod/v4/locales/fa.js";
@@ -24,7 +24,7 @@ export const login = async (username: string, password: string) => {
   if (!match) {
     return null;
   }
-  const payload: AuthPayload = {
+  const payload: AuthPayloadDTO = {
     username: user.username,
     email: user.email,
     roles: user.roles,
