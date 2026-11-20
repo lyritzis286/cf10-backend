@@ -143,3 +143,37 @@ describe("USER API TEST POST REQUESTS", () => {
     expect(res.body.message).toBe("Missing or Invalid Authorization header");
   });
 });
+
+describe("USER API TEST DELETE REQUESTS", () => {
+  let token: string;
+
+  beforeAll(async () => {
+    await server.start();
+    token = jwt.sign(
+      {
+        username: "admin",
+        email: "admin@aueb.gr",
+        roles: [
+          {
+            role: "ADMIN",
+            description: "Administrator user",
+            active: true,
+          },
+        ],
+      },
+      JWT_SECRET,
+      { expiresIn: "1h" },
+    );
+  });
+  afterAll(async () => {
+    await server.stop();
+  });
+
+  test("DELETE /users delete a user", async () => {
+    const res = await server.request
+      .delete("/users/jestuser")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+  });
+});
