@@ -51,6 +51,7 @@ export const create = async (
     }
     res.status(200).json(result);
   } catch (err) {
+    return res.status(404).json({ message: "user already exists" });
     next(err);
   }
 };

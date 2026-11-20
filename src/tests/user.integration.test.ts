@@ -72,3 +72,74 @@ describe("User API Tests for GET", () => {
     expect(res.body.message).toBe("User not found by email");
   });
 });
+
+describe("USER API TEST POST REQUESTS", () => {
+  let token: string;
+
+  beforeAll(async () => {
+    await server.start();
+    token = jwt.sign(
+      {
+        username: "admin",
+        email: "admin@aueb.gr",
+        roles: [
+          {
+            role: "ADMIN",
+            description: "Administrator user",
+            active: true,
+          },
+        ],
+      },
+      JWT_SECRET,
+      { expiresIn: "1h" },
+    );
+  });
+
+  afterAll(async () => {
+    await server.stop();
+  });
+
+  test("POST /users -> Create new user", async () => {
+    const res = await server.request
+      .post("/users")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        username: "jestuser",
+        password: "123456",
+        email: "jestuser@aueb.gr",
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.username).toBe("jestuser");
+  });
+
+  test("POST /users -> create user that exists", async () => {
+    const res = await server.request
+      .post("/users")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        username: "jestuser",
+        password: "123456",
+        email: "jestuser@aueb.gr",
+      });
+    expect(res.status).toBe(404);
+    expect(res.body.message).toBe("user already exists");
+  });
+  test("POST /users -> Create user with username<6 and password<6", async () => {
+    const res = await server.request
+      .post("/users")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ username: "jest", password: "1234", email: "jestuser@aueb.gr" });
+
+    expect(res.status).toBe(400);
+  });
+
+  test("POST /users -> Create user without JWT or Expired JWT", async () => {
+    const res = await server.request
+      .post("/users")
+      .send({ username: "jest", password: "1234", email: "jestuser@aueb.gr" });
+
+    expect(res.status).toBe(401);
+    expect(res.body.message).toBe("Missing or Invalid Authorization header");
+  });
+});

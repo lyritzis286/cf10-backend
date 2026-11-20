@@ -15,7 +15,7 @@ export const authenticate = (
   if (!header || !header.startsWith("Bearer ")) {
     res
       .status(401)
-      .json({ message: "Missing or Invalid Authoriazation header" });
+      .json({ message: "Missing or Invalid Authorization header" });
     return;
   }
   const token = header.split(" ")[1];
