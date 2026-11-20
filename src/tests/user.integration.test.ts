@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import { findLastInsertedUser } from "../dao/user.dao";
 
 dotenv.config();
 
@@ -50,4 +51,24 @@ describe("User API Tests for GET", () => {
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   }, 10000);
+
+  test("GET /users -> return a status code in wrong endpoint", async () => {
+    const res = await server.request.get("/user");
+    expect(res.status).toBe(404);
+  });
+
+  test("GET /users/email/:email -> returns a user by email", async () => {
+    const lastUser = await findLastInsertedUser();
+    const res = await server.request.get("/users/email/" + lastUser?.email);
+    console.log(res.body);
+    expect(res.status).toBe(200);
+    expect(res.body.username).toBe(lastUser?.username);
+  });
+
+  test("GET /users/email/:email -> returns a user with wrong email", async () => {
+    const res = await server.request.get("/users/email/" + "loulxxx13@aueb.gr");
+    // console.log(res.body);
+    expect(res.status).toBe(404);
+    expect(res.body.message).toBe("User not found by email");
+  });
 });
